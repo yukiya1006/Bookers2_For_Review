@@ -4,7 +4,7 @@
       <h2>User info</h2>
       <%= render 'users/info', user: @book.user %>
       <h2 class="mt-3">New book</h2>
-      <%= render 'form', book: Book.new %>
+      <%= render 'form', book: Book.new, review_count: @review_count %>
     </div>
     <div class='col-md-8 offset-md-1'>
   		<h2>Book detail</h2>
@@ -30,7 +30,8 @@
             size      : 36,
             starOff   : '<%= asset_path('star-off.png') %>',
             starOn    : '<%= asset_path('star-on.png') %>',
-            half      : false,
+            starHalf  : '<%= asset_path('star-half.png') %>',
+            half      : true,
             readOnly: true,
             score: <%=@book.star %>,});
            </script>

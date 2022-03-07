@@ -7,6 +7,7 @@ class BooksController < ApplicationController
   def show
     @book = Book.find(params[:id])
     @book_comment = BookComment.new
+    @review_count = Book.where(id: Book.new).where(user_id: current_user.id).count
   end
 
 # allメソッドでモデルと紐づくbookのすべてのレコードを取得
@@ -14,6 +15,7 @@ class BooksController < ApplicationController
 
   def index
      @book = Book.new
+     @review_count = Book.where(id: params[:id]).where(user_id: current_user.id).count
   if params[:button].to_i == 1
      @books = Book.all.order(created_at: :desc)
     # button1の処理
@@ -43,6 +45,7 @@ class BooksController < ApplicationController
 
   def edit
     @book = Book.find(params[:id])
+    @review_count = Book.where(id: params[:id]).where(user_id: current_user.id).count
     @user = User.new
     if @book.user.id != current_user.id
       redirect_to books_path
@@ -66,7 +69,7 @@ class BooksController < ApplicationController
   private
 
   def book_params
-    params.require(:book).permit(:title, :body, :star)
+    params.require(:book).permit(:title, :body, :star, :category)
   end
 
   def ensure_correct_user

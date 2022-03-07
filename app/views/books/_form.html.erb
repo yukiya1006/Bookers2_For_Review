@@ -7,22 +7,41 @@
     <%= f.label :opinion %>
     <%= f.text_area :body, class: 'form-control book_body' %>
   </div>
-  <div class="form-group" id="star">
-    <%= f.label :star, '評価' %>
-    <%= f.hidden_field :star, id: :review_star %>
+  <div class="form-group">
+    <%= f.label :category %>
+    <%= f.text_area :category, class: 'form-control book_body' %>
   </div>
 
-    <!-- 評価javascript -->
+  <% if review_count < 1 %>
+    <div class="form-group" id="star">
+    <%= f.label :star, '評価' %>
+    <%= f.hidden_field :star, id: :review_star %>
+    </div>
   <script>
-  $('#star').raty({
+  $('#star').raty({   //フォームで指定したidをratyに紐づけ
     size     : 36,
     starOff:  '<%= asset_path('star-off.png') %>',
     starOn : '<%= asset_path('star-on.png') %>',
+    starHalf: '<%= asset_path('star-half.png') %>',
 
-    scoreName: 'book[star]',
-    half: false,
+    scoreName: 'book[star]',   //bookモデルのstarカラムに保存
+    half: true,                //falseで星半分を不許可、trueで星半分を許可しDBには0.5単位の数値が保存される
+                               //※半分にする場合はデータ型をfloatに設定
   });
   </script>
+  <% else %>
+        <div id="star-rate<%=@book.id%>"></div>
+        <script>
+          $('#star-rate<%=@book.id%>').raty({
+            size      : 36,
+            starOff   : '<%= asset_path('star-off.png') %>',
+            starOn    : '<%= asset_path('star-on.png') %>',
+            starHalf  : '<%= asset_path('star-half.png') %>',
+            half      : true,
+            readOnly: true,
+            score: <%=book.star %>,});
+           </script>
+  <% end %>
 
   <div class="form-group">
     <%= f.submit class: 'btn btn-success' %>

@@ -6,11 +6,14 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     @books = @user.books
     @book = Book.new
+    @review_count = Book.where(id: Book.new).where(user_id: current_user.id).count
+
   end
 
   def index
     @users = User.all
     @book = Book.new
+    @review_count = Book.where(id: @book).where(user_id: current_user.id).count
   end
 
 
@@ -32,7 +35,7 @@ class UsersController < ApplicationController
   private
 
   def user_params
-    params.require(:user).permit(:name, :introduction, :profile_image)
+    params.require(:user).permit(:name, :introduction, :profile_image, :category_id)
   end
 
   def ensure_correct_user
