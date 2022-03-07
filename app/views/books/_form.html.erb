@@ -9,41 +9,35 @@
   </div>
   <div class="form-group">
     <%= f.label :category %>
-    <%= f.text_area :category, class: 'form-control book_body' %>
+    <%= f.text_area :category_mame, class: 'form-control book_body' %>
   </div>
 
-  <% if review_count < 1 %>
+  <% if book.id === nil %>
     <div class="form-group" id="star">
-    <%= f.label :star, '評価' %>
-    <%= f.hidden_field :star, id: :review_star %>
+      <%= f.label :rate %>
+      <%= f.hidden_field :rate, id: :review_star, class:'form-control' %>
     </div>
-  <script>
-  $('#star').raty({   //フォームで指定したidをratyに紐づけ
-    size     : 36,
-    starOff:  '<%= asset_path('star-off.png') %>',
-    starOn : '<%= asset_path('star-on.png') %>',
-    starHalf: '<%= asset_path('star-half.png') %>',
-
-    scoreName: 'book[star]',   //bookモデルのstarカラムに保存
-    half: true,                //falseで星半分を不許可、trueで星半分を許可しDBには0.5単位の数値が保存される
-                               //※半分にする場合はデータ型をfloatに設定
-  });
-  </script>
+     <script>
+    $(document).on('turbolinks:load', function() {
+      $('#star').empty();
+      $('#star').raty({
+        size     : 36,
+        starOff:  '<%= asset_path('star-off.png') %>',
+        starOn : '<%= asset_path('star-on.png') %>',
+        starHalf: '<%= asset_path('star-half.png') %>',
+        scoreName: 'book[star]',  //bookモデルのstarカラムに保存
+        half: true,    //falseで星半分を不許可、trueで星半分を許可しDBには0.5単位の数値が保存される
+                      //※半分にする場合はデータ型をfloatに設定
+      });
+    })
+    </script>
   <% else %>
-        <div id="star-rate<%=@book.id%>"></div>
-        <script>
-          $('#star-rate<%=@book.id%>').raty({
-            size      : 36,
-            starOff   : '<%= asset_path('star-off.png') %>',
-            starOn    : '<%= asset_path('star-on.png') %>',
-            starHalf  : '<%= asset_path('star-half.png') %>',
-            half      : true,
-            readOnly: true,
-            score: <%=book.star %>,});
-           </script>
+    <%= render "books/rest_star", book: book %>
   <% end %>
 
   <div class="form-group">
     <%= f.submit class: 'btn btn-success' %>
   </div>
 <% end %>
+
+
